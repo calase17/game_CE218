@@ -7,7 +7,7 @@ import java.awt.geom.AffineTransform;
 import static game2.Constants.*;
 
 public class View extends JComponent {
-    public static final Color BG_COLOR = Color.BLACK, TEXT_COLOR = Color.RED, TEXT_BG_COLOR = Color.YELLOW;
+    public static final Color BG_COLOR = Color.BLACK, TEXT_COLOR = Color.GREEN, TEXT_BG_COLOR = Color.BLUE;
     private Game game;
     Image im = Constants.MILKYWAY1;
     AffineTransform bgTransf;
@@ -36,7 +36,7 @@ public class View extends JComponent {
         g.fillRect(0, getHeight() - SCORE_PANEL_HEIGHT, getWidth(), SCORE_PANEL_HEIGHT);
         g.setColor(TEXT_COLOR);
         g.drawRect(0, getHeight() - SCORE_PANEL_HEIGHT, getWidth(), SCORE_PANEL_HEIGHT);
-        g.setFont(new Font("dialog", Font.BOLD, (2 * SCORE_PANEL_HEIGHT / 3)));
+        g.setFont(new Font(Font.MONOSPACED, Font.BOLD, (2 * SCORE_PANEL_HEIGHT / 3)));
         g.drawString("Score " + Integer.toString(game.getScore()), 10, getHeight() - SCORE_PANEL_HEIGHT / 3);
         g.drawString("Lives " + Integer.toString(game.getLives()), 200, getHeight() - SCORE_PANEL_HEIGHT / 3);
         g.drawString("Level " + Integer.toString(game.getLevel()), 400, getHeight() - SCORE_PANEL_HEIGHT / 3);

@@ -20,7 +20,7 @@ public class Constants {
     static{
         try{
             ASTEROID1 = ImageManager.loadImage("asteroid1");
-            MILKYWAY1 = ImageManager.loadImage("milkyway1");
+            MILKYWAY1 = ImageManager.loadImage("galaxy");
 
         }
         catch (IOException e){

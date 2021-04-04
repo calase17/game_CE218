@@ -10,9 +10,10 @@ import utilities.Vector2D;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.Buffer;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 
 import static game2.Constants.DELAY;
@@ -20,7 +21,7 @@ import static game2.Constants.setFullScreenDimensions;
 
 public class Game {
     public static final int N_INITIAL_ASTEROIDS = 5;
-    public static final int INITIAL_LIVES = 5;
+    public static final int INITIAL_LIVES = 1;
     public static final int INITIAL_SAFETY_DURATION = 5000; // millisecs
     boolean shipIsSafe; // within initial safety period?
     public List<GameObject> objects;
@@ -48,10 +49,10 @@ public class Game {
         }
         System.out.println("Constructor 1");
         ctrl = new Keys();
-        // playerShip = new PlayerShip(ctrl);
+        playerShip = new PlayerShip(ctrl);
         // playerShip = new PlayerShip(new RotateNShoot());
         // playerShip = new PlayerShip(new RandomAction());
-        playerShip = new PlayerShip(new AimNShoot(this));
+        //playerShip = new PlayerShip(new AimNShoot(this));
         objects.add(playerShip);
         ships.add(playerShip);
         remainingAsteroids = N_INITIAL_ASTEROIDS;
@@ -69,12 +70,12 @@ public class Game {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Game game = new Game(false);
         game.gameLoop();
     }
 
-    public void gameLoop() {
+    public void gameLoop() throws IOException {
          gameStartTime = startTime = System.currentTimeMillis();
         while (!ended) {
             long time0 = System.currentTimeMillis();
@@ -91,9 +92,10 @@ public class Game {
 
 
         }
+        saveScore();
+        int highScore = getHighScore();
+        JOptionPane.showMessageDialog(null, "The high score is: " + highScore + "\n Your score was: " + score);
 
-        System.out.println("Your score was " + score);
-        System.out.println("Game time " + (int) ((System.currentTimeMillis() - gameStartTime) / 1000));
     }
 
     public void incScore(int inc) {
@@ -103,6 +105,29 @@ public class Game {
     public int getScore() {
         return score;
     }
+
+    public int getHighScore() throws IOException {
+        ArrayList<Integer> scoreArray = new ArrayList<>();
+        String filename = "high_score.txt";
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+        String line;
+        while ((line = bufferedReader.readLine()) != null){
+            int scoreLine = Integer.parseInt(line);
+            scoreArray.add(scoreLine);
+        }
+        bufferedReader.close();
+        Collections.sort(scoreArray, Collections.reverseOrder());
+        return scoreArray.get(0);
+    }
+
+    public void saveScore() throws IOException {
+        String filename = "high_score.txt";
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filename, true));
+        bufferedWriter.write(score + "\n"
+        );
+        bufferedWriter.close();
+    }
+
 
     public int getLives() {
         return lives;
