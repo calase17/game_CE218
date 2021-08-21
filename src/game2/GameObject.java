@@ -15,6 +15,8 @@ public abstract class GameObject {
     public double radius;
     public boolean dead;
     public Clip deathSound = null;
+    public Clip shieldSound = null;
+    public Clip garbageSound = null;
 
 
     public GameObject(Vector2D pos, Vector2D vel, double radius) {
@@ -48,7 +50,24 @@ public abstract class GameObject {
 
     public void collisionHandling(GameObject other) {
         // returns any score to be added
+
         if ((!this.dead || !other.dead) && this.canHit(other) && this.overlap(other)){
+            if (this.getClass() == PlayerShip.class && other.getClass() == Garbage.class){
+                System.out.println("garbage");
+                ((PlayerShip) this).isGarbage = true;
+            }
+            else if (other.getClass() == PlayerShip.class && this.getClass() == Garbage.class){
+                System.out.println("garbage2");
+                ((PlayerShip) other).isGarbage = true;
+            }
+            else if (this.getClass() == PlayerShip.class && other.getClass() == Shield.class){
+                System.out.println("shield1");
+                ((PlayerShip) this).isShield = true;
+            }
+            else if (other.getClass() == PlayerShip.class && this.getClass() == Shield.class){
+                ((PlayerShip) other).isShield = true;
+                System.out.println("shield2");
+            }
             this.hit();
             other.hit();
         }
@@ -58,9 +77,9 @@ public abstract class GameObject {
 
     public abstract void draw(Graphics2D g);
 
-    public void hit()
-    { dead = true;
-      if (deathSound!=null)
+    public void hit() {
+        dead = true;
+        if (deathSound!=null)
           SoundManager.play(deathSound);
     }
 

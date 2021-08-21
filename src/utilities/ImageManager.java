@@ -20,7 +20,6 @@ public class ImageManager {
 
     public static Image loadImage(String fname) throws IOException {
         BufferedImage img = null;
-        System.out.println(path + fname + ext);
         img = ImageIO.read(new File(path + fname + ext));
         images.put(fname, img);
         return img;

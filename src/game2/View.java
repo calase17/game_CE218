@@ -43,6 +43,11 @@ public class View extends JComponent {
 
     }
 
+    public void setMessage(int message){
+
+    }
+
+
     public Dimension getPreferredSize() {
         return Constants.FRAME_SIZE;
     }

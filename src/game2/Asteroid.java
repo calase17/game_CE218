@@ -28,8 +28,8 @@ public class Asteroid extends GameObject {
         double angle = Math.random() * 2 * Math.PI;
         vel.set(new Vector2D(speed*Math.cos(angle), speed*Math.sin(angle)));
         deathSound = SoundManager.bangSmall;
-        rotationPerFrame = Math.random()*0.1;
-        double width = Math.min(Math.max(20+new Random().nextGaussian()*30, 30), 50);
+        rotationPerFrame = Math.random() * 0.1;
+        double width = Math.min(Math.max(20 + new Random().nextGaussian()*30, 30), 50);
 
         // keep aspect ratio of original image
         Image im = Sprite.ASTEROID1;
@@ -37,8 +37,7 @@ public class Asteroid extends GameObject {
         double direction = Math.random() * 2 * Math.PI;
         dir = new Vector2D(Math.cos(direction), Math.sin(direction));
         sprite = new Sprite(im, pos, dir, width, height);
-        radius = sprite.getRadius();
-        System.out.println("Asteroid radius set to " + radius);
+
     }
 
     public void draw(Graphics2D g) {
@@ -56,6 +55,6 @@ public class Asteroid extends GameObject {
     @Override
     public boolean canHit(GameObject other) {
 
-        return other instanceof PlayerShip || other instanceof Bullet && ((Bullet) other).firedByPlayerShip;
+        return other.getClass() == PlayerShip.class || other.getClass() == Bullet.class;
     }
 }

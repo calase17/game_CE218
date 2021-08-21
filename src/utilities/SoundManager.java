@@ -34,9 +34,10 @@ public class SoundManager {
     public final static Clip saucerBig = getClip("saucerBig");
     public final static Clip saucerSmall = getClip("saucerSmall");
     public final static Clip thrust = getClip("thrust");
-
+    public final static Clip powerUp = getClip("powerup");
+    public final static Clip garbage = getClip("garbage");
     public final static Clip[] clips = {bangLarge, bangMedium, bangSmall, beat1, beat2,
-            extraShip, fire, saucerBig, saucerSmall, thrust};
+            extraShip, fire, saucerBig, saucerSmall, thrust, powerUp, garbage};
 
     static {
         for (int i = 0; i < bullets.length; i++)
@@ -105,6 +106,7 @@ public class SoundManager {
     public static void extraShip() {
         play(extraShip);
     }
+
 
 }
 

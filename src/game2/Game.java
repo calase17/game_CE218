@@ -1,19 +1,21 @@
 package game2;
 
-import controllers.AimNShoot;
 import controllers.RandomAction;
 import controllers.RotateNShoot;
 import utilities.JEasyFrame;
 import utilities.JEasyFrameFull;
-//import utilities.SoundManager;
+
 import utilities.Vector2D;
 
 import javax.swing.*;
 import java.awt.*;
+
+
 import java.io.*;
-import java.nio.Buffer;
+
 import java.util.*;
 import java.util.List;
+import java.util.Timer;
 
 
 import static game2.Constants.DELAY;
@@ -21,19 +23,21 @@ import static game2.Constants.setFullScreenDimensions;
 
 public class Game {
     public static final int N_INITIAL_ASTEROIDS = 5;
-    public static final int INITIAL_LIVES = 1;
+    public static final int INITIAL_LIVES = 5;
     public static final int INITIAL_SAFETY_DURATION = 5000; // millisecs
     boolean shipIsSafe; // within initial safety period?
     public List<GameObject> objects;
     List<Ship> ships;
     public PlayerShip playerShip;
     Keys ctrl;
-    int score, lives, level, remainingAsteroids, remainingSaucers;
+    int score, lives, level, remainingAsteroids, remainingGarbage;
     View view;
     boolean ended;
     long gameStartTime;  // start time for whole game
     long startTime;  // start time for current level/life
     boolean resetting;
+    Timer shieldTimer;
+    boolean addShield;
 
     public Game(boolean fullScreen) {
         System.out.println("Constructor");
@@ -43,32 +47,44 @@ public class Game {
         objects = new ArrayList<GameObject>();
         ships = new ArrayList<Ship>();
         for (int i = 0; i < N_INITIAL_ASTEROIDS; i++) {
-
             objects.add(new Asteroid());
-
+            objects.add(new Garbage());
         }
-        System.out.println("Constructor 1");
+
+        objects.add(new Shield());
         ctrl = new Keys();
         playerShip = new PlayerShip(ctrl);
-        // playerShip = new PlayerShip(new RotateNShoot());
-        // playerShip = new PlayerShip(new RandomAction());
-        //playerShip = new PlayerShip(new AimNShoot(this));
         objects.add(playerShip);
         ships.add(playerShip);
         remainingAsteroids = N_INITIAL_ASTEROIDS;
-        remainingSaucers = 0;
-        addSaucers();
+        remainingGarbage = 5;
         score = 0;
         lives = INITIAL_LIVES;
         level = 1;
         ended = false;
         shipIsSafe = true;
         resetting = false;
-        JFrame frame = fullScreen ? new JEasyFrameFull(view) : new JEasyFrame(view, "Asteroids 5");
+        int delay = ((int) (Math.random() * (10000 - 5000))) + 5000;
+        shieldTimer = new Timer();
+        shieldTimer.schedule(new ShieldTimer(),delay);
+        JFrame frame = fullScreen ? new JEasyFrameFull(view) : new JEasyFrame(view, "AstroGains");
         frame.setResizable(false);
         frame.addKeyListener(ctrl);
 
     }
+
+    class ShieldTimer extends TimerTask{
+        @Override
+        public void run() {
+            addShield = true;
+            if (!playerShip.activeShield){
+                int delay = ((int) (Math.random() * (10000 - 5000))) + 5000;
+                objects.add(new Shield());
+                shieldTimer.schedule(new ShieldTimer(), delay);
+            }
+        }
+    }
+
 
     public static void main(String[] args) throws IOException {
         Game game = new Game(false);
@@ -95,7 +111,6 @@ public class Game {
         saveScore();
         int highScore = getHighScore();
         JOptionPane.showMessageDialog(null, "The high score is: " + highScore + "\n Your score was: " + score);
-
     }
 
     public void incScore(int inc) {
@@ -123,8 +138,7 @@ public class Game {
     public void saveScore() throws IOException {
         String filename = "high_score.txt";
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filename, true));
-        bufferedWriter.write(score + "\n"
-        );
+        bufferedWriter.write(score + "\n");
         bufferedWriter.close();
     }
 
@@ -147,14 +161,16 @@ public class Game {
             return false;
         for (int i = 0; i < N_INITIAL_ASTEROIDS + (level - 1) * 5; i++) {
             objects.add(new Asteroid());
-
+            objects.add(new Garbage());
         }
+
         remainingAsteroids = N_INITIAL_ASTEROIDS + (level - 1) * 5;
         playerShip.reset();
         objects.add(playerShip);
         ships.add(playerShip);
-        remainingSaucers = 0;
-        addSaucers();
+        remainingGarbage = 0;
+        int delay = ((int) (Math.random() * (10000 - 5000))) + 5000;
+
         try {
             Thread.sleep(2000);
         } catch (Exception e) {
@@ -171,14 +187,13 @@ public class Game {
         // suppress collision detection at beginning of game
         if (shipIsSafe) {
             shipIsSafe = System.currentTimeMillis() < startTime + INITIAL_SAFETY_DURATION;
-        } else
+        } else{
             for (int i = 0; i < objects.size(); i++) {
                 for (int j = i + 1; j < objects.size(); j++) {
                     objects.get(i).collisionHandling(objects.get(j));
                 }
             }
-
-
+        }
         ended = true;
         List<GameObject> alive = new ArrayList<>();
         for (GameObject o : objects) {
@@ -200,8 +215,17 @@ public class Game {
         }
 
 
+
+
         synchronized (Game.class) {
-            if (remainingAsteroids==0 && remainingSaucers==0){
+            if(addShield){
+                addShield = false;
+            }
+
+            if (playerShip.isShield){
+
+            }
+            if (remainingAsteroids==0 && remainingGarbage ==0){
                 score += 1000;
                 reset(true);
             }
@@ -217,33 +241,14 @@ public class Game {
         }
     }
 
+
+
     public void updateScore(GameObject o) {
-        if (o.getClass() == Asteroid.class) {
+        if (o.getClass() == Garbage.class) {
             score += 100;
-            remainingAsteroids -= 1;
+            remainingGarbage -= 1;
         }
-        else if (o.getClass() == Saucer.class) {
-            score += 500;
-            remainingSaucers -= 1;
         }
-    }
-
-    private void addSaucers() {
-        for (int i = 0; i < 3; i++) {
-            System.out.println("Adding saucer");
-            Controller ctrl = (i % 3 != 0 ? new RandomAction() : new RotateNShoot());
-            Color colorBody = (i % 3 != 0 ? Color.PINK : Color.GREEN);
-            Random r = new Random();
-            Vector2D s = new Vector2D(
-                    r.nextInt(Constants.WORLD_WIDTH),
-                    r.nextInt(Constants.WORLD_HEIGHT));
-            Ship saucer = new Saucer(s, ctrl, colorBody, Color.white);
-            objects.add(saucer);
-            ships.add(saucer);
-            remainingSaucers++;
-        }
-
-    }
 
 }
 
