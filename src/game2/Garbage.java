@@ -22,7 +22,6 @@ public class Garbage extends GameObject {
         super(new Vector2D(WORLD_WIDTH *Math.random(), WORLD_HEIGHT * Math.random()), new Vector2D(0,0), 8);
         double width = 35;
         Image im = Sprite.GARBAGE;
-        garbageSound = SoundManager.garbage;
         double height = width * im.getHeight(null) / im.getHeight(null);
         sprite = new Sprite(im, pos, dir, width, height);
     }

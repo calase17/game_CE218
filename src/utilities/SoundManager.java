@@ -36,8 +36,9 @@ public class SoundManager {
     public final static Clip thrust = getClip("thrust");
     public final static Clip powerUp = getClip("powerup");
     public final static Clip garbage = getClip("garbage");
+    public final static Clip wormhole = getClip("wormhole");
     public final static Clip[] clips = {bangLarge, bangMedium, bangSmall, beat1, beat2,
-            extraShip, fire, saucerBig, saucerSmall, thrust, powerUp, garbage};
+            extraShip, fire, saucerBig, saucerSmall, thrust, powerUp, garbage, wormhole};
 
     static {
         for (int i = 0; i < bullets.length; i++)

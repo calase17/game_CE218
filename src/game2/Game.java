@@ -5,6 +5,7 @@ import controllers.RotateNShoot;
 import utilities.JEasyFrame;
 import utilities.JEasyFrameFull;
 
+import utilities.SoundManager;
 import utilities.Vector2D;
 
 import javax.swing.*;
@@ -50,8 +51,8 @@ public class Game {
             objects.add(new Asteroid());
             objects.add(new Garbage());
         }
-
         objects.add(new Shield());
+        objects.add(new WormHole());
         ctrl = new Keys();
         playerShip = new PlayerShip(ctrl);
         objects.add(playerShip);
@@ -220,10 +221,6 @@ public class Game {
         synchronized (Game.class) {
             if(addShield){
                 addShield = false;
-            }
-
-            if (playerShip.isShield){
-
             }
             if (remainingAsteroids==0 && remainingGarbage ==0){
                 score += 1000;

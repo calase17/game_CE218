@@ -15,7 +15,7 @@ public class Constants {
     public static final Dimension FRAME_SIZE = new Dimension(FRAME_WIDTH, FRAME_HEIGHT+SCORE_PANEL_HEIGHT);
     public static final int DELAY = 20; // milliseconds
     public static final double DT = DELAY/1000.0;  // delay in seconds
-    public static Image ASTEROID1, MILKYWAY1,SHIELD,GARBAGE;
+    public static Image ASTEROID1, MILKYWAY1,SHIELD,GARBAGE, WORMHOLE;
 
     static{
         try{
@@ -23,6 +23,7 @@ public class Constants {
             MILKYWAY1 = ImageManager.loadImage("galaxy");
             SHIELD = ImageManager.loadImage("shield");
             GARBAGE = ImageManager.loadImage("garbage");
+            WORMHOLE = ImageManager.loadImage("wormhole");
         }
         catch (IOException e){
             e.printStackTrace();

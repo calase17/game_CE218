@@ -15,8 +15,6 @@ public abstract class GameObject {
     public double radius;
     public boolean dead;
     public Clip deathSound = null;
-    public Clip shieldSound = null;
-    public Clip garbageSound = null;
 
 
     public GameObject(Vector2D pos, Vector2D vel, double radius) {
@@ -67,6 +65,14 @@ public abstract class GameObject {
             else if (other.getClass() == PlayerShip.class && this.getClass() == Shield.class){
                 ((PlayerShip) other).isShield = true;
                 System.out.println("shield2");
+            }
+            else if (this.getClass() == PlayerShip.class && other.getClass() == WormHole.class){
+                ((PlayerShip) this).isWormhole = true;
+                System.out.println("Wormhole1");
+            }
+            else if (other.getClass() == PlayerShip.class && this.getClass() == WormHole.class){
+                ((PlayerShip) other).isWormhole = true;
+                System.out.println("Wormhole2");
             }
             this.hit();
             other.hit();
