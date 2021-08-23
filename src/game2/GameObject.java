@@ -74,6 +74,14 @@ public abstract class GameObject {
                 ((PlayerShip) other).isWormhole = true;
                 System.out.println("Wormhole2");
             }
+            else if (this.getClass() == PlayerShip.class && other.getClass() == SpeedBoost.class){
+                ((PlayerShip) this).isSpeedBoost = true;
+                System.out.println("SpeedBoost1");
+            }
+            else if (other.getClass() == PlayerShip.class && this.getClass() == SpeedBoost.class){
+                ((PlayerShip) other).isSpeedBoost = true;
+                System.out.println("SpeedBoost2");
+            }
             this.hit();
             other.hit();
         }

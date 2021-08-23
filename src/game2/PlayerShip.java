@@ -17,6 +17,8 @@ public class PlayerShip extends Ship {
     public boolean isShield;
     public boolean isGarbage;
     public boolean isWormhole;
+    public boolean isSpeedBoost;
+    public boolean speedBoostActive;
     public static final Color COLOR = Color.ORANGE;
     public int XP[] = { -6, 0, 6, 0 }, YP[] = { 8, 4, 8, -8 };
     public int XPTHRUST[] = { -5, 0, 5, 0 }, YPTHRUST[] = { 7, 3, 7, -7 };
@@ -62,10 +64,10 @@ public class PlayerShip extends Ship {
     @Override
     public boolean canHit(GameObject other) {
         if (activeShield){
-            return false;
+            return other.getClass() == WormHole.class || other.getClass() == SpeedBoost.class;
         }
        return other.getClass() == Shield.class || other.getClass() == Asteroid.class ||
-               other.getClass() == Garbage.class || other.getClass() == WormHole.class;
+               other.getClass() == Garbage.class || other.getClass() == WormHole.class || other.getClass() == SpeedBoost.class;
     }
 
     @Override
@@ -99,6 +101,14 @@ public class PlayerShip extends Ship {
                 SoundManager.play(SoundManager.wormhole);
             }
             pos.set(WORLD_WIDTH *Math.random(), WORLD_HEIGHT * Math.random());
+            return;
+        }
+        if (isSpeedBoost){
+            isSpeedBoost = false;
+            if (SoundManager.powerUp != null){
+                SoundManager.play(SoundManager.powerUp);
+            }
+            vel.mult(3);
             return;
         }
 

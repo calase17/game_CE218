@@ -2,12 +2,8 @@ package game2;
 
 import utilities.SoundManager;
 import utilities.Vector2D;
-
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-
 import static game2.Constants.*;
 
 
@@ -41,8 +37,6 @@ public class Asteroid extends GameObject {
     }
 
     public void draw(Graphics2D g) {
-        //g.setColor(Color.RED);
-        //g.fillOval((int) pos.x - radius, (int) pos.y - radius, 2 * radius, 2 * radius);
         sprite.draw(g);
     }
 
@@ -55,6 +49,7 @@ public class Asteroid extends GameObject {
     @Override
     public boolean canHit(GameObject other) {
 
-        return other.getClass() == PlayerShip.class || other.getClass() == Bullet.class;
+        return other.getClass() == PlayerShip.class || other.getClass() == Bullet.class ;
     }
+
 }

@@ -1,5 +1,7 @@
 package game2;
 
+import utilities.SoundManager;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 

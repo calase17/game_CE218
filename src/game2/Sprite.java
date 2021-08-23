@@ -11,7 +11,7 @@ import utilities.ImageManager;
 import utilities.Vector2D;
 
 public class Sprite {
-    public static Image ASTEROID1, MILKYWAY2, SHIElD_POWERUP, GARBAGE, WORMHOLE;
+    public static Image ASTEROID1, ROCKET, MILKYWAY2, SHIElD_POWERUP, GARBAGE, WORMHOLE;
     static {
         try {
             ASTEROID1 = ImageManager.loadImage("asteroid1");
@@ -19,6 +19,7 @@ public class Sprite {
             SHIElD_POWERUP = ImageManager.loadImage("shield");
             GARBAGE = ImageManager.loadImage("garbage");
             WORMHOLE = ImageManager.loadImage("wormhole");
+            ROCKET = ImageManager.loadImage("rocket");
 
         } catch (IOException e) {
             e.printStackTrace();

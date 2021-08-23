@@ -38,7 +38,11 @@ public class Game {
     long startTime;  // start time for current level/life
     boolean resetting;
     Timer shieldTimer;
+    Timer wormholeTimer;
+    Timer speedBoostTimer;
     boolean addShield;
+    boolean addWormhole;
+    boolean addSpeedBoost;
 
     public Game(boolean fullScreen) {
         System.out.println("Constructor");
@@ -51,8 +55,6 @@ public class Game {
             objects.add(new Asteroid());
             objects.add(new Garbage());
         }
-        objects.add(new Shield());
-        objects.add(new WormHole());
         ctrl = new Keys();
         playerShip = new PlayerShip(ctrl);
         objects.add(playerShip);
@@ -68,6 +70,10 @@ public class Game {
         int delay = ((int) (Math.random() * (10000 - 5000))) + 5000;
         shieldTimer = new Timer();
         shieldTimer.schedule(new ShieldTimer(),delay);
+        wormholeTimer = new Timer();
+        wormholeTimer.schedule(new WormholeTimer(), delay);
+        speedBoostTimer = new Timer();
+        speedBoostTimer.schedule(new SpeedBoostTimer(), delay);
         JFrame frame = fullScreen ? new JEasyFrameFull(view) : new JEasyFrame(view, "AstroGains");
         frame.setResizable(false);
         frame.addKeyListener(ctrl);
@@ -83,6 +89,26 @@ public class Game {
                 objects.add(new Shield());
                 shieldTimer.schedule(new ShieldTimer(), delay);
             }
+        }
+    }
+
+    class WormholeTimer extends TimerTask{
+        @Override
+        public void run() {
+            addWormhole = true;
+            int delay = ((int) (Math.random() * (25000 - 5000))) + 5000;
+            objects.add(new WormHole());
+            wormholeTimer.schedule(new WormholeTimer(), delay);
+        }
+    }
+
+    class SpeedBoostTimer extends TimerTask{
+        @Override
+        public void run() {
+            addSpeedBoost = true;
+            int delay = ((int) (Math.random() * (35000 - 5000))) + 5000;
+            objects.add(new SpeedBoost());
+            wormholeTimer.schedule(new SpeedBoostTimer(), delay);
         }
     }
 
@@ -164,13 +190,13 @@ public class Game {
             objects.add(new Asteroid());
             objects.add(new Garbage());
         }
-
+        int delay = ((int) (Math.random() * (10000 - 5000))) + 5000;
+        shieldTimer.schedule(new ShieldTimer(), delay);
         remainingAsteroids = N_INITIAL_ASTEROIDS + (level - 1) * 5;
         playerShip.reset();
         objects.add(playerShip);
         ships.add(playerShip);
         remainingGarbage = 0;
-        int delay = ((int) (Math.random() * (10000 - 5000))) + 5000;
 
         try {
             Thread.sleep(2000);
@@ -221,6 +247,12 @@ public class Game {
         synchronized (Game.class) {
             if(addShield){
                 addShield = false;
+            }
+            if (addWormhole){
+                addWormhole = false;
+            }
+            if (addSpeedBoost){
+                addSpeedBoost = false;
             }
             if (remainingAsteroids==0 && remainingGarbage ==0){
                 score += 1000;

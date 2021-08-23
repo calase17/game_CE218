@@ -5,11 +5,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
 
-import javax.sound.sampled.Clip;
-        import javax.sound.sampled.AudioSystem;
-        import javax.sound.sampled.AudioInputStream;
-        import java.io.File;
-
 // SoundManager for Asteroids
 
 public class SoundManager {
@@ -30,7 +25,7 @@ public class SoundManager {
     public final static Clip beat1 = getClip("beat1");
     public final static Clip beat2 = getClip("beat2");
     public final static Clip extraShip = getClip("extraShip");
-    public final static Clip fire = getClip("fire");
+    public final static Clip laser = getClip("laser");
     public final static Clip saucerBig = getClip("saucerBig");
     public final static Clip saucerSmall = getClip("saucerSmall");
     public final static Clip thrust = getClip("thrust");
@@ -38,11 +33,11 @@ public class SoundManager {
     public final static Clip garbage = getClip("garbage");
     public final static Clip wormhole = getClip("wormhole");
     public final static Clip[] clips = {bangLarge, bangMedium, bangSmall, beat1, beat2,
-            extraShip, fire, saucerBig, saucerSmall, thrust, powerUp, garbage, wormhole};
+            extraShip, laser, saucerBig, saucerSmall, thrust, powerUp, garbage, wormhole};
 
     static {
         for (int i = 0; i < bullets.length; i++)
-            bullets[i] = getClip("fire");
+            bullets[i] = getClip("laser");
     }
 
     public static void main(String[] args) throws Exception {

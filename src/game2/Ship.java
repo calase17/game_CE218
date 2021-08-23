@@ -1,6 +1,7 @@
 package game2;
 
-//import utilities.SoundManager;
+
+import utilities.SoundManager;
 import utilities.Vector2D;
 
 import java.awt.*;
@@ -45,10 +46,15 @@ public abstract class Ship extends GameObject{
             mkBullet();
             action.shoot = false;
             timeLastShot = timeNow;
-            //SoundManager.fire();
+            SoundManager.fire();
+        }
+        if (thrusting){
+            SoundManager.startThrust();
+        }
+        else{
+            SoundManager.stopThrust();
         }
         thrusting=action.thrust!=0;
-
     }
 
 }
